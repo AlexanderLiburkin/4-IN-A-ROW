@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <style>
+    body{background-color: #092aba;}
+    .p1{background: url('/images/redcircle.png'); background-repeat: no-repeat;}
+    .p2{background: url('/images/yellowCircle.png'); background-repeat: no-repeat;}
+    td{
+        width:120px;height: 120px;
+        border: 1px solid black; 
+        background-color: white; 
+        border-right: 5px solid transparent;
+       -webkit-background-clip: padding;
+       -moz-background-clip: padding;
+       background-clip: padding-box; 
+       border-bottom: 5px solid transparent; 
+       border-left: 5px solid transparent; 
+       border-top: 5px solid transparent;
+    }
+    .p{font-family: cursive; color: white; text-align: center; text-decoration-line:underline;}
+    .w{color: #03fc1c; font-family: cursive;}
+    .l{color: red; font-family: cursive;}
+    .row{display: flex;}
+    .cul{flex: 50%; padding: 10px; height: 300px; }
+    #end{width: 100%; height: 800px;color: white;display: none; background-repeat: no-repeat; margin-left: 12%;}
+    table{margin-left: 24%; border: solid 8px;}
+    </style>
+</head>
+<body>
+<h1 class="p" data-aos="zoom-in" data-aos-duration="2000">player <%= player %> </h1>
+<div id="end">
+    <div class="row">
+    <div class="cul">
+        <h1 class="w">Winner:</h1>
+        <img src="/images/yoda.jpg" alt=""></div>
+        <div class="cul">
+            <h1 class="l">Loser:</h1>
+     <img src="https://media.giphy.com/media/XDFkHDcfcBV7MOTnAO/giphy.gif" alt=""></div>
+</div>
+</div>
+<table id="brd" data-aos="flip-down"  data-aos-duration="2000">
+
+<tr>
+    <td id="c36" onclick="sendMove(36)"></td>
+    <td id="c37" onclick="sendMove(37)"></td>
+    <td id="c38" onclick="sendMove(38)"></td>
+    <td id="c39" onclick="sendMove(39)"></td>
+    <td id="c40" onclick="sendMove(40)"></td>
+    <td id="c41" onclick="sendMove(41)"></td>
+    <td id="c42" onclick="sendMove(42)"></td>
+</tr>
+<tr>
+    <td id="c29" onclick="sendMove(29)"></td>
+    <td id="c30" onclick="sendMove(30)"></td>
+    <td id="c31" onclick="sendMove(31)"></td>
+    <td id="c32" onclick="sendMove(32)"></td>
+    <td id="c33" onclick="sendMove(33)"></td>
+    <td id="c34" onclick="sendMove(34)"></td>
+    <td id="c35" onclick="sendMove(35)"></td>
+</tr>
+<tr>
+    <td id="c22" onclick="sendMove(22)"></td>
+    <td id="c23" onclick="sendMove(23)"></td>
+    <td id="c24" onclick="sendMove(24)"></td>
+    <td id="c25" onclick="sendMove(25)"></td>
+    <td id="c26" onclick="sendMove(26)"></td>
+    <td id="c27" onclick="sendMove(27)"></td>
+    <td id="c28" onclick="sendMove(28)"></td>
+</tr>
+<tr>
+    <td id="c15" onclick="sendMove(15)"></td>
+    <td id="c16" onclick="sendMove(16)"></td>
+    <td id="c17" onclick="sendMove(17)"></td>
+    <td id="c18" onclick="sendMove(18)"></td>
+    <td id="c19" onclick="sendMove(19)"></td>
+    <td id="c20" onclick="sendMove(20)"></td>
+    <td id="c21" onclick="sendMove(21)"></td>
+</tr>
+
+<tr>
+    <td id="c8" onclick="sendMove(8)"></td>
+    <td id="c9" onclick="sendMove(9)"></td>
+    <td id="c10" onclick="sendMove(10)"></td>
+    <td id="c11" onclick="sendMove(11)"></td>
+    <td id="c12" onclick="sendMove(12)"></td>
+    <td id="c13" onclick="sendMove(13)"></td>
+    <td id="c14" onclick="sendMove(14)"></td>
+</tr>
+<tr>
+    <td  id="c1" onclick="sendMove(1)"></td>
+    <td id="c2" onclick="sendMove(2)"></td>
+    <td id="c3" onclick="sendMove(3)"></td>
+    <td id="c4" onclick="sendMove(4)"></td>
+    <td id="c5" onclick="sendMove(5)"></td>
+    <td id="c6" onclick="sendMove(6)"></td>
+    <td id="c7" onclick="sendMove(7)"></td>
+</tr>
+</table>
+<script>
+var player=<%= player %>;
+function setP1(num){
+    document.getElementById("c"+num).classList.add("p1");
+}
+function setP2(num){
+    document.getElementById("c"+num).classList.add("p2");
+}
+function updateData(data){
+    console.log(data);
+    if(data.GameStatus=="on"){
+        if(data.player==1){
+            setP1(data.cell);
+        } else {
+            setP2(data.cell);
+        }
+    }
+    else if(data.GameStatus=="over"){
+        GameOver();
+    }
+}
+function GameOver(){
+    document.getElementById("brd").style.display="none";
+    document.getElementById("end").style.display="block";
+}
+async function sendMove(cell){
+    let response = await fetch(`/GetMove/${player}/${cell}`);
+    let data = await response.json();
+    updateData(data);
+}
+async function fetchText() {
+    let response = await fetch('/GetLast');
+    let data = await response.json();
+    updateData(data);
+}
+setInterval(fetchText,500);
+</script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>AOS.init();</script>
+</body>
+</html>
